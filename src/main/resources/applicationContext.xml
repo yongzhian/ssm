@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-4.3.xsd   
+          http://www.springframework.org/schema/context   
+          http://www.springframework.org/schema/context/spring-context-4.3.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+          http://www.springframework.org/schema/aop
+          http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <context:annotation-config/>
+    <!--注解扫描但排除Controller-->
+    <context:component-scan base-package="cn.zain">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 如果存在依赖关系，使用配置控制顺序
+    <bean name="sceneContext" class="com.flwrobot.common.SceneContext" />-->
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="username" value="${db.username}"></property>
+        <property name="password" value="${db.password}"></property>
+        <property name="url" value="${db.url}"></property>
+        <property name="driverClassName" value="${db.driver}"></property>
+        <!-- 连接初始值，连接池启动时创建的连接数量的初始值  默认值是0 -->
+        <property name="initialSize" value="${db.initialSize}"></property>
+        <!--可以在池中保持空闲的最小连接数，超出设置值之外的空闲连接将被创建，如设置为0，则不创建-->
+        <property name="minIdle" value="${db.minIdle}"></property>
+        <!--保持空闲的最大连接数，超出设置值之外的空闲连接将被回收，如设置为负数，则不限制-->
+        <property name="maxIdle" value="${db.maxIdle}"></property>
+        <!--可以在这个池中同时被分配的有效连接数的最大值，如设置为负数，则不限制-->
+        <property name="maxTotal" value="${db.maxTotal}"></property>
+        <!--（如果没有可用连接）池在抛出异常前等待的一个连接被归还的最大毫秒数，设置为-1则等待时间不确定-->
+        <property name="maxWaitMillis" value="${db.maxWaitMillis}"></property>
+        <property name="validationQuery" value="SELECT 1"></property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-conf.xml"></property>
+        <property name="mapperLocations" value="classpath*:mybatis/*Dao.xml"></property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置事务 transaction-manager="transactionManager" 默认 故不需配置
+    propagation:事务传播行为-->
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="count*" read-only="true"/>
+            <tx:method name="select*" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.RuntimeException"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="AllServiceMethod" expression="execution(* cn.zain.service.*.*(..))"/>
+        <aop:advisor pointcut-ref="AllServiceMethod" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <!--动态代理实现 不用写dao的实现-->
+    <bean id="MapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+        <property name="basePackage" value="cn.zain.dao"/>
+    </bean>
+
+    <!-- 上面使用动态代理故不需要逐个配置
+    <bean id="sysUserDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="cn.zain.dao.SysUserDao"></property>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+    </bean>-->
+
+    <mongo:mongo host="${mongo.host}" port="${mongo.port}">
+        <mongo:options connections-per-host="${mongo.options.connections.per.host}"
+                       threads-allowed-to-block-for-connection-multiplier="${mongo.options.threads.allowed.to.block.for.connection.multiplier}"
+                       connect-timeout="${mongo.options.connect.timeout}"
+                       max-wait-time="${mongo.options.max.wait.time}"
+                       auto-connect-retry="${mongo.options.auto.connect.retry}"
+                       socket-keep-alive="${mongo.options.socket.keep.alive}"
+                       socket-timeout="${mongo.options.socket.timeout}"
+                       slave-ok="${mongo.options.slave.ok}"
+                       write-number="${mongo.options.write.number}"
+                       write-timeout="${mongo.options.write.timeout}"
+                       write-fsync="${mongo.options.write.fsync}"/>
+    </mongo:mongo>
+
+    <mongo:db-factory id="doseeDbFactory" dbname="${mongo.db.name}" mongo-ref="mongo"/>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="doseeDbFactory" />
+    </bean>
+
+</beans>

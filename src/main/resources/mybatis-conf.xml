@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!--  参数参考org.apache.ibatis.session.Configuration -->
+	<settings>
+		<!--指定 MyBatis 所用日志的具体实现，未指定时将自动查找,name区分大小写，value不区分-->
+		<setting name="logImpl" value="LOG4J2"/>
+	</settings>
+
+	<!-- Spring中已经配置mapperLocations，故此不需再配置mapper属性,由于不支持通配符，建议在Spring中配置
+	<mappers>
+		<mapper resource="mybatis/SysUserDao.xml" />
+	</mappers>-->
+</configuration>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zain.dao.SysUserDao">
+    <resultMap id="BaseResultMap" type="cn.zain.model.entity.SysUser">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="username" jdbcType="VARCHAR" property="username" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="phone_no" jdbcType="VARCHAR" property="phoneNo" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="is_valid" jdbcType="CHAR" property="isValid" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="last_login" jdbcType="TIMESTAMP" property="lastLogin" />
+        <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+        <result column="is_locked" jdbcType="CHAR" property="isLocked" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, username, password, phone_no, remark, email, is_valid, create_time, last_login, 
+    last_login_ip, is_locked
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_user
+        where username = #{username}
+    </select>
+</mapper>

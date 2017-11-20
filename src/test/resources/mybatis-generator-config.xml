@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"
+        >
+<generatorConfiguration>
+
+    <!-- !!!! Driver Class Path !!!! -->
+    <classPathEntry
+            location="D:\software_dev\JetBrains\IDEA2016.1.3_workspace_flw_svn\robot_nlp\target\robot_nlp\WEB-INF\lib\mysql-connector-java-5.1.37.jar"/>
+    <context id="context" targetRuntime="MyBatis3">
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/> <!-- 取消注释-->
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!-- !!!! Database Configurations !!!! -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.21.104:3306/ssm?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+                        userId="root" password="passwd4root~Q"/>
+
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- !!!! Model Configurations !!!! -->
+        <javaModelGenerator targetPackage="cn.zain.model.entity"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="false"/>
+            <property name="trimStrings" value="false"/> <!-- 不对String进行trim-->
+        </javaModelGenerator>
+
+        <!-- !!!! Mapper XML Configurations !!!!-->
+        <sqlMapGenerator targetPackage="mybatis" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- !!!! Mapper Interface Configurations  接口位置 !!!!-->
+        <javaClientGenerator targetPackage="cn.zain.dao" targetProject="src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <!-- !!!! Table Configurations !!!! -->
+        <table tableName="sys_user" domainObjectName="SysUser" enableInsert="false" mapperName="SysUserDao"
+               enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableDeleteByPrimaryKey="false"
+               enableUpdateByExample="false" enableUpdateByPrimaryKey="false">
+            <generatedKey column="id" sqlStatement="Mysql"/>
+        </table>
+        <!--<table tableName="%" />-->
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出
+ OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="error" strict="true">
+    <Properties>
+        <Property name="filename">target/test.log</Property>
+    </Properties>
+    <Filter type="ThresholdFilter" level="trace"/>
+    <Appenders>
+        <Appender type="File" name="File" fileName="${filename}">
+            <Layout type="PatternLayout">
+                <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+            </Layout>
+        </Appender>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout  pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %l [%c] %p%n%m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!-- 该包下基于info记录，会覆盖root的级别，如果additivity="false"，则忽略与此冲突的配置-->
+        <Logger name="cn.zain" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="cn.zain.dao" level="trace" additivity="false">
+            <AppenderRef ref="Console"></AppenderRef>
+        </Logger>
+        <!-- 只有大于level才会被打印-->
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
