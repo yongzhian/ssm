@@ -33,7 +33,9 @@ public class SecurityFilter implements Filter {
         }
         request.setAttribute("error", "非法请求");
         logger.warn("非法请求 : " + request.getRemoteAddr() + url);
-        resp.sendRedirect(req.getContextPath() + "/sysuser/forward/login.do");
+//        resp.sendRedirect(req.getContextPath() + "/sysuser/forward/login.do");
+        request.setAttribute("path",req.getContextPath());
+        request.getRequestDispatcher("/sysuser/forward/login.do").forward(request,response);
         return;
     }
 

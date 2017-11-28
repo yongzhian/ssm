@@ -73,14 +73,14 @@
     </filter-mapping>
 
     <!-- 5、 权限校验-->
-    <filter>
-        <filter-name>securityFilter</filter-name>
-        <filter-class>cn.zain.filter.SecurityFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>securityFilter</filter-name>
-        <url-pattern>*</url-pattern>
-    </filter-mapping>
+    <!--<filter>-->
+        <!--<filter-name>securityFilter</filter-name>-->
+        <!--<filter-class>cn.zain.filter.SecurityFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>securityFilter</filter-name>-->
+        <!--<url-pattern>*</url-pattern>-->
+    <!--</filter-mapping>-->
 
 
     <welcome-file-list>

@@ -1,6 +1,11 @@
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%
     String path = request.getContextPath();
+    if(StringUtils.isBlank(path)){
+        path = String.valueOf(request.getAttribute("path"));
+    }
+    System.out.println(path+"+++++++++++++++++++++++++++++");
     String url = request.getRequestURI();
 %>
 <!DOCTYPE>
