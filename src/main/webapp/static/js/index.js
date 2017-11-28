@@ -1,6 +1,10 @@
-function exoprt() {
+function grid(path) {
+    window.open(path + "/sysuser/grid.do");
+}
+
+function exoprt(path) {
     $.ajax({
-        url: '/sysuser/export.do',
+        url: path + '/sysuser/export.do',
         type: "POST",
         data: {
             collectionName: $('#collectionName').val().trim(),
@@ -22,9 +26,9 @@ function exoprt() {
     });
 }
 
-function exoprt2() {
+function exoprt2(path) {
    var collectionName= $('#collectionName').val().trim();
     var pageNum=$('#pageNum').val().trim();
     var pageSize=$('#pageSize').val().trim()
-    window.open("/sysuser/export2.do?pageNum="+pageNum+"&pageSize="+pageSize+"&collectionName="+collectionName);
+    window.open(path + "/sysuser/export2.do?pageNum="+pageNum+"&pageSize="+pageSize+"&collectionName="+collectionName);
 }

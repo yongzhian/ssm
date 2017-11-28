@@ -1,6 +1,6 @@
-function login() {
+function login(path) {
     $.ajax({
-        url: '/sysuser/login.do',
+        url: path + '/sysuser/login.do',
         type: "POST",
         data: {
             username: $('#username').val().trim(),
@@ -10,7 +10,7 @@ function login() {
         dataType: "json",
         success: function (data) {
             if (data.result == 0) { //成功
-                window.self.location = "/pages/index.jsp";
+                window.self.location = "/forward/index.do";
             } else {
                 alert("登录失败," + data.error_msg);
             }

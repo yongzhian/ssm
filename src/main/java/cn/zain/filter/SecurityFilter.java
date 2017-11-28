@@ -22,8 +22,7 @@ public class SecurityFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         String url = req.getRequestURL().toString();
 
-        //登录页面不过滤
-        if (url.endsWith("login.jsp") || url.endsWith(".do") || url.endsWith(".js")) {
+        if (!url.endsWith(".do") || url.endsWith("/sysuser/forward/login.do")) {
             chain.doFilter(request, response);
             return;
         }
@@ -34,7 +33,7 @@ public class SecurityFilter implements Filter {
         }
         request.setAttribute("error", "非法请求");
         logger.warn("非法请求 : " + request.getRemoteAddr() + url);
-        resp.sendRedirect(req.getContextPath() + "/pages/login.jsp");
+        resp.sendRedirect(req.getContextPath() + "/sysuser/forward/login.do");
         return;
     }
 

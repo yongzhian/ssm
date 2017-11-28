@@ -38,6 +38,17 @@ public class SysUserController extends AbstractController {
     private SysUserService sysUserService;
 
     /**
+     * 功能说明：进入登录页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/forward/login.do", method = RequestMethod.GET)
+    public String forwardLogin() {
+        logger.debug("进入登录页面...");
+        return "login";
+    }
+
+    /**
      * 功能说明：用户登录
      *
      * @return
@@ -51,6 +62,17 @@ public class SysUserController extends AbstractController {
             return Msg.success();
         }
         return Msg.fail("认证失败!");
+    }
+
+    /**
+     * 功能说明：进入登录页面
+     *
+     * @return
+     */
+    @RequestMapping(value = "/forward/index.do", method = RequestMethod.GET)
+    public String forwardIndex() {
+        logger.debug("进入index页面...");
+        return "index";
     }
 
     /**
@@ -176,6 +198,7 @@ public class SysUserController extends AbstractController {
         PageInfo page = new PageInfo(sysUsers, 5);
         return Msg.success().add("pageInfo", page);
     }
+
 
     /**
      * 功能说明：分页查询(返回页面)
