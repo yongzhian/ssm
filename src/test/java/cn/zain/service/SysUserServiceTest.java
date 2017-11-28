@@ -18,6 +18,6 @@ public class SysUserServiceTest {
     private SysUserService sysUserService;
     @Test
     public void selectByUsernameTest() throws Exception {
-        logger.info(sysUserService.selectByUsername("zain"));
+//        logger.info(sysUserService.selectByUsername("zain"));
     }
 }

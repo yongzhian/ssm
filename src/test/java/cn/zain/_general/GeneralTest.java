@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GeneralTest {
     private static Logger logger = LogManager.getLogger();
@@ -45,23 +47,17 @@ public class GeneralTest {
         logger.info(String.format("%s,%s,%1$s,%2$s-%1$s", "a", "b"));   //输出：a,b,a,b,a
     }
 
+
     @Test
-    public void test() throws Exception {
-        System.out.println("开始测试...");
-        for(int i=1; i<100000; i++) {
-            new HelloWorld(i);
-            Thread.sleep(500);
-        }
+    public void patternTest() throws Exception {
+        String rule = "(\\d+(?=分[钟]?(\\d+(秒))?(定时|倒计时|计时|后)))" +
+                "|((?<=[计时|定时])\\d+(?=分[钟]?))";
+        rule = "(\\d+(?=[小]?时(\\d+(分|分钟))?(\\d+(秒))?(后|定时|倒计时|计时)))"+
+                "|((?<=[计|定]时)\\d+(?=分[钟]?))";
+//        rule = "((?<=[定时|倒计时|计时])\\d+(?=[小]?时))";
+        Pattern pattern = Pattern.compile(rule);
+        Matcher match = pattern.matcher("计时5分");
+        System.out.println(match.find());
     }
 }
-class HelloWorld {
-    List<Map<String,Set<String>>> list = new ArrayList<>();
-    public HelloWorld(int i) {
-        Set<String> set = new HashSet<>();
-        set.add("set...");
-        Map<String,Set<String>> map = new HashMap<>();
-        map.put("map4me",set);
-        list.add(map);
-        System.out.println("Hello Jayzee!" + i);
-    }
-}
+

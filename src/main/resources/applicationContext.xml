@@ -23,9 +23,8 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 
-    <!-- 如果存在依赖关系，使用配置控制顺序
-    <bean name="sceneContext" class="com.flwrobot.common.SceneContext" />-->
-
+    <!-- 如果存在依赖关系，使用配置控制顺序 -->
+    <context:property-placeholder location="classpath:sys-config.properties" />
     <!-- 配置数据源 -->
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="username" value="${db.username}"></property>
@@ -51,40 +50,35 @@
         <property name="mapperLocations" value="classpath*:mybatis/*Dao.xml"></property>
     </bean>
 
+    <!--动态代理实现,将mybatis接口的实现加入到ioc容器中-->
+    <bean id="MapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+        <property name="basePackage" value="cn.zain.dao"/>
+    </bean>
+
+    <!-- ===============事务控制的配置 ================-->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <!-- 配置事务 transaction-manager="transactionManager" 默认 故不需配置
-    propagation:事务传播行为-->
+    <aop:config>
+        <aop:pointcut id="txPoint" expression="execution(* cn.zain.service.*.*(..))"/>
+        <aop:advisor pointcut-ref="txPoint" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <!--配置事务增强，事务如何切入 transaction-manager="transactionManager" 默认   -->
     <tx:advice id="txAdvice">
         <tx:attributes>
             <tx:method name="find*" read-only="true"/>
             <tx:method name="get*" read-only="true"/>
             <tx:method name="count*" read-only="true"/>
             <tx:method name="select*" read-only="true"/>
-            <tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.RuntimeException"/>
+            <tx:method name="*"  rollback-for="java.lang.RuntimeException"/>
         </tx:attributes>
     </tx:advice>
 
-    <aop:config>
-        <aop:pointcut id="AllServiceMethod" expression="execution(* cn.zain.service.*.*(..))"/>
-        <aop:advisor pointcut-ref="AllServiceMethod" advice-ref="txAdvice"/>
-    </aop:config>
-
-    <!--动态代理实现 不用写dao的实现-->
-    <bean id="MapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
-        <property name="basePackage" value="cn.zain.dao"/>
-    </bean>
-
-    <!-- 上面使用动态代理故不需要逐个配置
-    <bean id="sysUserDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface" value="cn.zain.dao.SysUserDao"></property>
-        <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-    </bean>-->
-
+    <!-- ===============mongo ================-->
     <mongo:mongo host="${mongo.host}" port="${mongo.port}">
         <mongo:options connections-per-host="${mongo.options.connections.per.host}"
                        threads-allowed-to-block-for-connection-multiplier="${mongo.options.threads.allowed.to.block.for.connection.multiplier}"

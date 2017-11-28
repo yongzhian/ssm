@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE generatorConfiguration PUBLIC
         "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
-        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"
-        >
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 
-    <!-- !!!! Driver Class Path !!!! -->
+    <!-- !!!! Driver Class Path !!!!
     <classPathEntry
             location="D:\software_dev\JetBrains\IDEA2016.1.3_workspace_flw_svn\robot_nlp\target\robot_nlp\WEB-INF\lib\mysql-connector-java-5.1.37.jar"/>
+            -->
     <context id="context" targetRuntime="MyBatis3">
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
         <commentGenerator>
             <property name="suppressAllComments" value="true"/> <!-- 取消注释-->
-            <property name="suppressDate" value="true"/>
+            <!--<property name="suppressDate" value="true"/>-->
         </commentGenerator>
 
         <!-- !!!! Database Configurations !!!! -->
@@ -25,14 +25,14 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <!-- !!!! Model Configurations !!!! -->
+        <!-- !!!! Model Configurations javaBean生成的位置 !!!! -->
         <javaModelGenerator targetPackage="cn.zain.model.entity"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="false"/> <!-- 不对String进行trim-->
         </javaModelGenerator>
 
-        <!-- !!!! Mapper XML Configurations !!!!-->
+        <!-- !!!! Mapper XML Configurations 指定sql映射文件生成的位置 !!!!-->
         <sqlMapGenerator targetPackage="mybatis" targetProject="src/main/resources">
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -43,12 +43,15 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <!-- !!!! Table Configurations !!!! -->
+
+        <!-- table指定每个表的生成策略 -->
+        <table tableName="sys_user" domainObjectName="SysUser" mapperName="SysUserDao"></table>
+
+        <!-- !!!! Table Configurations !!!!
         <table tableName="sys_user" domainObjectName="SysUser" enableInsert="false" mapperName="SysUserDao"
                enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableDeleteByPrimaryKey="false"
                enableUpdateByExample="false" enableUpdateByPrimaryKey="false">
             <generatedKey column="id" sqlStatement="Mysql"/>
-        </table>
-        <!--<table tableName="%" />-->
+        </table>-->
     </context>
 </generatorConfiguration>

@@ -10,4 +10,9 @@ SpringMVC+Spring+MyBatis及其他常见开源jar
 1. 基于MongoDB的Excel文件导出和流导出（POI）
 1. log4J2的日志
 1. 基于Jetty的Web测试
-1. 基于jackson的数据转换
+1. 基于MockMvc的Controller单元测试
+1. 基于MyBatisGenerator进行自动化生成DAO
+1. 配置优化
+1. 基于PageHelper分页查询
+1. 添加CRUD基本功能
+1. 添加BootStrap框架

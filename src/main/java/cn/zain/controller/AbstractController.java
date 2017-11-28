@@ -22,28 +22,9 @@ import java.util.Map;
  */
 public abstract class AbstractController {
     protected static final Logger logger = LoggerFactory.getLogger(AbstractController.class);
-    private final String DEFAULT_USERNAME_KEY = "username";
-    private final String DEFAULT_USERNAME_VALUE = "Zain";
-
-    @Resource(name = "sysUserService")
-    private SysUserService sysUserService;
 
     @Autowired
     protected HttpServletRequest request;
-
-    /**
-     * 功能说明：统一认证
-     *
-     * @return
-     */
-    protected boolean authCheck() {
-        HttpSession session = request.getSession(true);
-        if (DEFAULT_USERNAME_VALUE.equalsIgnoreCase(request.getParameter(DEFAULT_USERNAME_KEY))) {
-            session.setAttribute("sysUser", sysUserService.selectByUsername(DEFAULT_USERNAME_VALUE));
-            return true;
-        }
-        return false;
-    }
 
     /**
      * 功能说明：统一异常处理
@@ -57,24 +38,6 @@ public abstract class AbstractController {
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("result", "网络异常，请稍后再试。");
         logger.error("出现异常..", e);
-        return returnMap;
-    }
-
-    protected static Map<String, Object> genFailReturnMap(String errorCode, String errorMsg){
-        logger.info("ServiceHelper.genFailReturnMap() - errorMsg: " + errorMsg);
-
-        Map<String, Object> returnMap = new HashMap<String, Object>();
-        returnMap.put("result", "1");
-        if(!StringUtils.isBlank(errorCode)) {
-            returnMap.put("error_code", errorCode);
-        }
-        returnMap.put("error_msg", StringTools.nvl(errorMsg, "操作失败。"));
-        return returnMap;
-    }
-
-    protected static Map<String, Object> genSuccessReturnMap(){
-        Map<String, Object> returnMap = new HashMap<String, Object>();
-        returnMap.put("result", "0");
         return returnMap;
     }
 }
